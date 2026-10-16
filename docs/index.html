@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>marz · will your app work in Iran, China and Russia?</title>
+<meta name="description" content="marz scans your code for services that are blocked, sanctioned or unavailable in Iran, China and Russia, with sources, alternatives, live OONI evidence and a reachability probe. Open source.">
+<meta property="og:title" content="marz · will your app make it across the border?">
+<meta property="og:description" content="Scan your code for Firebase, Google Maps, reCAPTCHA, OpenAI, Stripe… and see what breaks in IR, CN and RU, with sources and alternatives.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="site.css">
+<script>
+(function(){var t=localStorage.getItem('marz-theme');if(!t)t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;
+var l=localStorage.getItem('marz-lang')||((navigator.language||'').slice(0,2)==='fa'?'fa':'en');if(l==='fa'){document.documentElement.lang='fa';document.documentElement.dir='rtl';}})();
+</script>
+</head>
+<body>
+<a class="skip" href="#demo" data-i18n="skip">Skip to the demo</a>
+<header class="top">
+  <a class="brand" href="#" aria-label="marz home"><span class="brand-mark" aria-hidden="true"><i></i><i></i></span><b>marz</b><span class="brand-fa">مرز</span></a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#demo" data-i18n="nav.demo">Demo</a>
+    <a href="#install" data-i18n="nav.install">Install</a>
+    <a href="#how" data-i18n="nav.how">How</a>
+    <a href="#compare" data-i18n="nav.compare">Compare</a>
+    <a href="https://github.com/mrzroot/marz" class="gh">GitHub</a>
+  </nav>
+  <div class="toggles">
+    <button class="tog" id="lang" type="button" aria-label="فارسی / English"><span class="en-only">فا</span><span class="fa-only">EN</span></button>
+    <button class="tog" id="theme" type="button" aria-label="Toggle light and dark"><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg></button>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-copy">
+    <p class="kicker" data-i18n="hero.kicker">Open-source CLI · GitHub Action · runs in your browser</p>
+    <h1 data-i18n-html="hero.title">Will your app make it <em>across the border?</em></h1>
+    <p class="lede" data-i18n="hero.lede">marz reads your code and tells you which services are blocked, sanctioned or unavailable in Iran, China and Russia: Firebase, Google Maps, reCAPTCHA, OpenAI, Stripe, YouTube and more. It cites a source for each verdict and suggests alternatives that work there.</p>
+    <div class="install" id="install">
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-cmd="curl -fsSL https://mrzroot.github.io/marz/install.sh | sh">macOS · Linux</button>
+        <button role="tab" aria-selected="false" data-cmd="irm https://mrzroot.github.io/marz/install.ps1 | iex">Windows</button>
+        <button role="tab" aria-selected="false" data-cmd="go install github.com/mrzroot/marz/cmd/marz@latest">Go</button>
+      </div>
+      <div class="cmd"><code id="cmd">curl -fsSL https://mrzroot.github.io/marz/install.sh | sh</code><button type="button" class="copy" data-copy="#cmd" data-i18n="copy">Copy</button></div>
+      <p class="fine" data-i18n="install.fine">Single binary, no dependencies. The installer resumes broken downloads and checks SHA-256. Then run <code>marz</code> in your project.</p>
+    </div>
+  </div>
+  <div class="board" aria-label="Example departures board">
+    <div class="board-head"><span data-i18n="board.title">DEPARTURES · your-app</span><span class="clock" id="clock">--:--</span></div>
+    <div class="board-cols"><span data-i18n="board.service">Service</span><span data-i18n="board.to">To</span><span data-i18n="board.status">Status</span></div>
+    <div id="board-rows"></div>
+    <p class="board-foot" data-i18n="board.foot">Statuses from marz's knowledge base, updated 2026-10-16</p>
+  </div>
+</section>
+
+<section class="demo" id="demo">
+  <div class="section-head">
+    <h2 data-i18n="demo.title">Scan right here</h2>
+    <p data-i18n="demo.sub">This is the real marz scanner compiled to WebAssembly. Edit the sample files, paste your own, or open a folder. Nothing is uploaded; it all runs in your browser.</p>
+  </div>
+  <div class="demo-grid">
+    <div class="editor">
+      <div class="file-tabs" id="file-tabs" role="tablist"></div>
+      <textarea id="src" spellcheck="false" aria-label="File content" dir="ltr"></textarea>
+      <div class="editor-bar">
+        <label class="btn ghost"><input type="file" id="folder" webkitdirectory multiple hidden><span data-i18n="demo.folder">Open a folder…</span></label>
+        <button type="button" class="btn ghost" id="reset" data-i18n="demo.reset">Reset sample</button>
+        <span class="status-line" id="wasm-status" data-i18n="demo.loading">Loading scanner…</span>
+      </div>
+    </div>
+    <div class="results" aria-live="polite">
+      <div class="chips" role="group" aria-label="Countries">
+        <button type="button" class="chip on" data-cc="IR"><span class="flag">🇮🇷</span><span data-i18n="cc.IR">Iran</span></button>
+        <button type="button" class="chip on" data-cc="CN"><span class="flag">🇨🇳</span><span data-i18n="cc.CN">China</span></button>
+        <button type="button" class="chip on" data-cc="RU"><span class="flag">🇷🇺</span><span data-i18n="cc.RU">Russia</span></button>
+      </div>
+      <div class="passes" id="passes"></div>
+      <div id="findings"></div>
+      <div class="results-bar"><button type="button" class="btn" id="copy-md" data-i18n="demo.copymd">Copy Markdown report</button><span class="fine" id="files-count"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="section-head"><h2 data-i18n="how.title">Four commands</h2></div>
+  <div class="cards">
+    <article class="card">
+      <h3><code>marz</code></h3>
+      <p data-i18n="how.scan">Scans code and 12 manifest formats: npm, pip, Poetry, Go, Flutter, Gradle, Maven, CocoaPods, Composer, Bundler, Dockerfiles and compose files. Output as text, JSON, Markdown or SARIF, with <code>--fail-on</code> for CI.</p>
+      <pre dir="ltr"><code>$ marz --country IR --fail-on high
+CRITICAL Firebase (backend)
+   IR ⊘ sanctioned
+   src/firebase.ts:6 shop-demo.firebaseapp.com
+   IR: → Supabase · Appwrite · Liara / ArvanCloud</code></pre>
+    </article>
+    <article class="card">
+      <h3><code>marz probe</code></h3>
+      <p data-i18n="how.probe">Run it from inside the country. It tests DNS, TCP, TLS and HTTP step by step and recognises the Iranian filter's 10.10.34.x DNS answers, block pages, Cloudflare 1009, CloudFront geo-blocks and the AI APIs' "unsupported country" errors.</p>
+      <pre dir="ltr"><code>$ marz probe --from . -v
+✖ generativelanguage.googleapis.com  geo-blocked
+    Google: user location is not supported
+✓ api.anthropic.com  ok  (HTTP 401: wants a key)</code></pre>
+    </article>
+    <article class="card">
+      <h3><code>marz check</code></h3>
+      <p data-i18n="how.check">Live evidence from OONI's measurements inside each country. Real output from 2026-10-16:</p>
+      <pre dir="ltr"><code>$ marz check www.youtube.com --country IR,RU
+IR  blocked: 4762 measurements,
+    93% anomalous, 3250 confirmed
+RU  likely blocked: 49598 measurements,
+    55% anomalous</code></pre>
+    </article>
+    <article class="card">
+      <h3><code>marz fix fonts</code></h3>
+      <p data-i18n="how.fix">The most common issue, fixed for you: it downloads the Google Fonts woff2 subsets into your web root and rewrites your &lt;link&gt; and @import tags.</p>
+      <pre dir="ltr"><code>$ marz fix fonts --write
+public/index.html
+  - https://fonts.googleapis.com/css2?family=Inter…
+  + ./fonts/inter-a3675e7a.css
+Self-hosted 7 font file(s) (213 KB)</code></pre>
+    </article>
+  </div>
+  <div class="legend">
+    <h3 data-i18n="legend.title">What the statuses mean</h3>
+    <ul>
+      <li><span class="st st-blocked">blocked</span><span data-i18n="legend.blocked">Filtered by the state censor.</span></li>
+      <li><span class="st st-sanctioned">sanctioned</span><span data-i18n="legend.sanctioned">The provider refuses users or developers from the country.</span></li>
+      <li><span class="st st-unavailable">unavailable</span><span data-i18n="legend.unavailable">The service doesn't operate or sell there.</span></li>
+      <li><span class="st st-degraded">degraded</span><span data-i18n="legend.degraded">Throttled, slow or unreliable.</span></li>
+      <li><span class="st st-unknown">unknown</span><span data-i18n="legend.unknown">No reliable public data. marz says so instead of guessing; run probe.</span></li>
+      <li><span class="st st-ok">ok</span><span data-i18n="legend.ok">Works, as far as public sources say.</span></li>
+    </ul>
+  </div>
+  <div class="action">
+    <div>
+      <h3 data-i18n="action.title">In every pull request</h3>
+      <p data-i18n="action.sub">The GitHub Action adds a Markdown report to the job summary, can upload SARIF to code scanning, and fails the build at the severity you choose.</p>
+    </div>
+    <pre dir="ltr"><code>- uses: mrzroot/marz@v0.1.0
+  with:
+    countries: IR,CN
+    fail-on: high
+    sarif: true</code></pre>
+  </div>
+</section>
+
+<section class="compare" id="compare">
+  <div class="section-head"><h2 data-i18n="cmp.title">Is there anything like it?</h2><p data-i18n="cmp.sub">The closest tool checks deployed sites for China only. Nothing else we found reads your repository and covers sanctions as well as censorship.</p></div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th></th><th data-i18n="cmp.code">Reads your code</th><th data-i18n="cmp.cc">Countries</th><th data-i18n="cmp.sanc">Sanctions too</th><th data-i18n="cmp.alt">Sources and alternatives</th><th data-i18n="cmp.probe">Live probe</th><th data-i18n="cmp.oss">Open source</th></tr></thead>
+    <tbody>
+      <tr class="us"><th>marz</th><td>✓ <span data-i18n="cmp.marzcode">code + 12 manifests</span></td><td>IR CN RU</td><td>✓</td><td>✓</td><td>✓</td><td>✓ MIT</td></tr>
+      <tr><th><a href="https://www.chinawebfoundry.com/china-site-scanner/">China Site Scanner</a></th><td data-i18n="cmp.css">deployed site's HTML/JS</td><td>CN</td><td>✗</td><td>✓</td><td>✗</td><td>✗</td></tr>
+      <tr><th><a href="https://github.com/voidly-ai/voidly-check-action">voidly-check-action</a></th><td data-i18n="cmp.list">✗ you list domains</td><td>many</td><td>✗</td><td>✗</td><td>✓ API</td><td>✓</td></tr>
+      <tr><th><a href="https://github.com/chinaready/launchready-stackbreak-lab">StackBreak lab</a></th><td>✗</td><td>CN</td><td>✗</td><td>✗</td><td>✓</td><td>✓</td></tr>
+      <tr><th><a href="https://github.com/hatamiarash7/CheckFiltering">CheckFiltering</a></th><td>✗</td><td>IR</td><td>✗</td><td>✗</td><td>DNS</td><td>✓</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fine limits" data-i18n="cmp.limits">Honest limits: marz knows 30-odd services, not everything. Censorship changes, so unknown means "probe it". It is not legal advice about sanctions.</p>
+</section>
+</main>
+
+<footer class="foot">
+  <span>marz 0.1.0 · MIT · <a href="https://github.com/mrzroot">Mohammadreza Zare (M-R-Z)</a></span>
+  <span><a href="https://github.com/mrzroot/marz">GitHub</a> · <a href="https://github.com/mrzroot/marz/blob/main/README.fa.md">README فارسی</a> · <a href="https://mrzroot.github.io/">mrzroot.github.io</a></span>
+</footer>
+<script src="wasm_exec.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
