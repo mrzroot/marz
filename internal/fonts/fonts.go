@@ -185,7 +185,7 @@ func Fix(ctx context.Context, o Options) (*Plan, error) {
 func DefaultDir(root string) string {
 	for _, d := range []string{"public", "static", "www", "wwwroot"} {
 		if st, err := os.Stat(filepath.Join(root, d)); err == nil && st.IsDir() {
-			return filepath.Join(d, "fonts")
+			return d + "/fonts"
 		}
 	}
 	return "fonts"
