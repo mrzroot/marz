@@ -1,0 +1,1889 @@
+{
+ "updated": "2026-10-16",
+ "sources": {
+  "wiki-ir": {
+   "title": "Internet censorship in Iran (Wikipedia)",
+   "url": "https://en.wikipedia.org/wiki/Internet_censorship_in_Iran"
+  },
+  "wiki-cn": {
+   "title": "List of websites blocked in mainland China (Wikipedia)",
+   "url": "https://en.wikipedia.org/wiki/List_of_websites_blocked_in_mainland_China"
+  },
+  "wiki-ru": {
+   "title": "Internet censorship in Russia (Wikipedia)",
+   "url": "https://en.wikipedia.org/wiki/Internet_censorship_in_Russia"
+  },
+  "fikaro": {
+   "title": "Fikaro: sanctioned developer tools, tested from an Iranian server (16 Mehr 1405 / 2026-10-08)",
+   "url": "https://fikaro.ir/blog/tahrim-abzar-barnamenevisi"
+  },
+  "gcp-terms": {
+   "title": "Google Cloud Platform Terms of Service (sanctioned countries)",
+   "url": "https://cloud.google.com/terms"
+  },
+  "firebase-terms": {
+   "title": "Firebase Terms of Service",
+   "url": "https://firebase.google.com/terms"
+  },
+  "maps-prohibited": {
+   "title": "Google Maps Platform prohibited territories",
+   "url": "https://cloud.google.com/maps-platform/terms/maps-prohibited-territories"
+  },
+  "gemini-regions": {
+   "title": "Gemini API available regions",
+   "url": "https://ai.google.dev/gemini-api/docs/available-regions"
+  },
+  "openai-countries": {
+   "title": "OpenAI API supported countries and territories",
+   "url": "https://developers.openai.com/api/docs/supported-countries"
+  },
+  "anthropic-countries": {
+   "title": "Anthropic supported countries and regions",
+   "url": "https://www.anthropic.com/supported-countries"
+  },
+  "stripe-global": {
+   "title": "Stripe global availability",
+   "url": "https://stripe.com/global"
+  },
+  "paypal-countries": {
+   "title": "PayPal worldwide availability",
+   "url": "https://www.paypal.com/us/webapps/mpp/country-worldwide"
+  },
+  "launchready": {
+   "title": "LaunchReady StackBreak lab: which Western services break in China",
+   "url": "https://github.com/chinaready/launchready-stackbreak-lab"
+  },
+  "jsdelivr-icp": {
+   "title": "jsDelivr lost its China ICP license (jsdelivr/jsdelivr#18348)",
+   "url": "https://github.com/jsdelivr/jsdelivr/issues/18348"
+  },
+  "flutter-china": {
+   "title": "Using Flutter in China (official mirrors)",
+   "url": "https://docs.flutter.dev/community/china"
+  },
+  "ooni": {
+   "title": "OONI Explorer: live measurements",
+   "url": "https://explorer.ooni.org/"
+  },
+  "cwf-fonts": {
+   "title": "ChinaWebFoundry: Google Fonts in China (GreatFire and 21YunBox data, Sep 2026)",
+   "url": "https://www.chinawebfoundry.com/resources/china-web-guide/google-fonts-china/"
+  },
+  "cwf-recaptcha": {
+   "title": "ChinaWebFoundry: reCAPTCHA in China (GreatFire data, Sep 2026)",
+   "url": "https://www.chinawebfoundry.com/resources/china-web-guide/recaptcha-china/"
+  },
+  "cwf-wp": {
+   "title": "ChinaWebFoundry: dependencies that break in China (GreatFire, Aug-Sep 2026)",
+   "url": "https://www.chinawebfoundry.com/resources/china-web-guide/wordpress-plugins-china/"
+  },
+  "cwf-cdn": {
+   "title": "ChinaWebFoundry: which JavaScript CDNs work in China (2026)",
+   "url": "https://www.chinawebfoundry.com/resources/china-web-guide/javascript-cdn-china/"
+  }
+ },
+ "rules": [
+  {
+   "id": "google-fonts",
+   "name": "Google Fonts",
+   "category": "fonts",
+   "impact": "medium",
+   "side": "client",
+   "hosts": [
+    "fonts.googleapis.com",
+    "fonts.gstatic.com"
+   ],
+   "packages": {
+    "npm": [
+     "webfontloader",
+     "react-google-font-loader"
+    ]
+   },
+   "why": "A render-blocking stylesheet from a Google host. Where Google is blocked the page waits for a timeout, then falls back to a system font.",
+   "fa": "استایل‌شیت مسدودکنندهٔ رندر از دامنهٔ گوگل؛ جایی که گوگل مسدود است صفحه تا timeout منتظر می‌ماند.",
+   "fix": "Self-host the fonts: `marz fix fonts --write` downloads the woff2 files and rewrites your <link>/@import.",
+   "countries": {
+    "CN": {
+     "status": "degraded",
+     "note": "GreatFire read the font hosts as not blocked (Sep 2026), but 21YunBox's Beijing home-line test failed every request (Aug 2026). Treat it as unreliable.",
+     "sources": [
+      "cwf-fonts",
+      "launchready"
+     ],
+     "alternatives": [
+      "Self-hosted fonts (marz fix fonts, Fontsource)"
+     ]
+    },
+    "IR": {
+     "status": "ok",
+     "note": "Reachable from an Iranian server in the 2026-10-08 Fikaro test, but it is a Google host and has been intermittently filtered before; self-hosting removes the risk.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "Self-hosted Vazirmatn / Estedad / Sahel (marz fix fonts)"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "google-recaptcha",
+   "name": "Google reCAPTCHA",
+   "category": "captcha",
+   "impact": "high",
+   "side": "client",
+   "hosts": [],
+   "paths": [
+    "www.google.com/recaptcha",
+    "google.com/recaptcha",
+    "www.gstatic.com/recaptcha"
+   ],
+   "packages": {
+    "npm": [
+     "react-google-recaptcha",
+     "react-google-recaptcha-v3",
+     "vue-recaptcha",
+     "vue-recaptcha-v3",
+     "ng-recaptcha",
+     "ng-recaptcha-2",
+     "@google-cloud/recaptcha-enterprise"
+    ],
+    "pypi": [
+     "django-recaptcha",
+     "flask-recaptcha",
+     "google-cloud-recaptcha-enterprise"
+    ],
+    "composer": [
+     "google/recaptcha"
+    ],
+    "gem": [
+     "recaptcha"
+    ]
+   },
+   "why": "If the widget script cannot load, the form never gets a token, so sign-up, login and checkout stop working.",
+   "fa": "اگر اسکریپت کپچا بارگذاری نشود، فرم توکن نمی‌گیرد و ثبت‌نام/ورود/پرداخت از کار می‌افتد.",
+   "fix": "Use a self-hosted proof-of-work captcha, or load the captcha conditionally and fall back to a server-side challenge.",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "note": "www.google.com/recaptcha was blocked in 3 of 3 GreatFire tests (Sep 2026). The www.recaptcha.net domain read as not blocked and is a stopgap.",
+     "sources": [
+      "cwf-recaptcha",
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "ALTCHA (self-hosted, open source)",
+      "www.recaptcha.net (stopgap)",
+      "Tencent Captcha",
+      "GeeTest"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "note": "No reliable public measurement; run `marz probe` from an Iranian network.",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "ALTCHA (self-hosted, open source)",
+      "Arcaptcha (Iranian)"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "google-analytics",
+   "name": "Google Analytics / Tag Manager",
+   "category": "analytics",
+   "impact": "low",
+   "side": "client",
+   "hosts": [
+    "www.googletagmanager.com",
+    "googletagmanager.com",
+    "www.google-analytics.com",
+    "google-analytics.com",
+    "region1.google-analytics.com",
+    "ssl.google-analytics.com",
+    "stats.g.doubleclick.net"
+   ],
+   "packages": {
+    "npm": [
+     "react-ga",
+     "react-ga4",
+     "vue-gtag",
+     "vue-gtag-next",
+     "ngx-google-analytics",
+     "@analytics/google-analytics",
+     "gatsby-plugin-google-gtag",
+     "@nuxtjs/google-analytics",
+     "nuxt-gtag"
+    ]
+   },
+   "why": "You silently lose all analytics from the region. A synchronous GTM snippet in <head> can also delay rendering.",
+   "fa": "آمار آن کشور بی‌صدا از دست می‌رود و اسکریپت همگام GTM می‌تواند رندر را کند کند.",
+   "fix": "Load analytics async/defer, or self-host privacy-friendly analytics.",
+   "countries": {
+    "CN": {
+     "status": "degraded",
+     "note": "Google Tag Manager was reachable from a datacentre but blocked on a sampled home line (Aug 2026).",
+     "sources": [
+      "cwf-wp",
+      "launchready"
+     ],
+     "alternatives": [
+      "Umami (self-hosted)",
+      "Plausible CE (self-hosted)",
+      "Matomo",
+      "Baidu Tongji"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Umami (self-hosted)",
+      "Matomo"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "google-maps",
+   "name": "Google Maps Platform",
+   "category": "maps",
+   "impact": "high",
+   "side": "client",
+   "hosts": [
+    "maps.googleapis.com",
+    "maps.gstatic.com",
+    "maps.google.com"
+   ],
+   "packages": {
+    "npm": [
+     "@react-google-maps/api",
+     "@googlemaps/js-api-loader",
+     "@googlemaps/google-maps-services-js",
+     "google-map-react",
+     "@vis.gl/react-google-maps",
+     "vue3-google-map",
+     "@angular/google-maps"
+    ],
+    "pypi": [
+     "googlemaps"
+    ],
+    "pub": [
+     "google_maps_flutter"
+    ],
+    "maven": [
+     "com.google.android.gms:play-services-maps",
+     "com.google.maps.android:*"
+    ],
+    "pod": [
+     "GoogleMaps",
+     "Google-Maps-iOS-Utils"
+    ],
+    "composer": [
+     "googlemaps/*"
+    ]
+   },
+   "why": "The map area stays grey or shows an error, and anything built on it (store locator, address picker, delivery tracking) breaks.",
+   "fa": "نقشه خاکستری می‌ماند و هر چیزی که روی آن ساخته شده (انتخاب آدرس، ردیابی پیک) خراب می‌شود.",
+   "fix": "Put the map behind an interface and use a local provider in each market.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Iran is a Google Maps Platform prohibited territory.",
+     "sources": [
+      "maps-prohibited"
+     ],
+     "alternatives": [
+      "Neshan Maps API",
+      "Map.ir",
+      "OpenStreetMap + MapLibre GL / Leaflet"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn",
+      "launchready"
+     ],
+     "alternatives": [
+      "AMap (Gaode)",
+      "Baidu Maps",
+      "Tencent Maps"
+     ]
+    },
+    "RU": {
+     "status": "ok",
+     "alternatives": [
+      "Yandex Maps",
+      "2GIS"
+     ]
+    }
+   }
+  },
+  {
+   "id": "firebase",
+   "name": "Firebase",
+   "category": "backend",
+   "impact": "critical",
+   "side": "both",
+   "hosts": [
+    "firebaseio.com",
+    "firebaseapp.com",
+    "firestore.googleapis.com",
+    "identitytoolkit.googleapis.com",
+    "securetoken.googleapis.com",
+    "firebasestorage.googleapis.com",
+    "firebaseinstallations.googleapis.com",
+    "fcm.googleapis.com",
+    "firebaseremoteconfig.googleapis.com",
+    "firebase.googleapis.com",
+    "firebasedynamiclinks.googleapis.com"
+   ],
+   "packages": {
+    "npm": [
+     "firebase",
+     "@firebase/*",
+     "firebase-admin",
+     "@react-native-firebase/*",
+     "reactfire",
+     "vuefire",
+     "@angular/fire"
+    ],
+    "pypi": [
+     "firebase-admin",
+     "pyrebase4",
+     "pyrebase"
+    ],
+    "pub": [
+     "firebase_core",
+     "firebase_auth",
+     "cloud_firestore",
+     "firebase_messaging",
+     "firebase_storage",
+     "firebase_analytics",
+     "firebase_crashlytics",
+     "firebase_database",
+     "firebase_remote_config"
+    ],
+    "maven": [
+     "com.google.firebase:*"
+    ],
+    "pod": [
+     "Firebase",
+     "Firebase/*",
+     "FirebaseCore",
+     "FirebaseAuth",
+     "FirebaseFirestore",
+     "FirebaseMessaging"
+    ],
+    "go": [
+     "firebase.google.com/go*"
+    ],
+    "composer": [
+     "kreait/firebase-php"
+    ],
+    "gem": [
+     "firebase"
+    ]
+   },
+   "why": "Auth, database, storage and push all go through Google endpoints. When they are unreachable the app cannot log users in or load data.",
+   "fa": "احراز هویت، دیتابیس، فایل و پوش همه از سرورهای گوگل می‌گذرند؛ اگر در دسترس نباشند اپ عملاً از کار می‌افتد.",
+   "fix": "Use a backend you can host in or near the market, or keep Firebase behind your own API.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Firebase follows the Google Cloud sanctions terms; Fikaro's 2026-10-08 test got 403 for the console, Firestore and Auth.",
+     "sources": [
+      "firebase-terms",
+      "gcp-terms",
+      "fikaro"
+     ],
+     "alternatives": [
+      "Supabase (self-hosted)",
+      "Appwrite",
+      "PocketBase",
+      "Liara / ArvanCloud / Hamravesh (Iranian PaaS)",
+      "Pushe or Najva for push"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "note": "Google endpoints are blocked, and most Chinese Android phones have no Google Play services, so FCM does not work.",
+     "sources": [
+      "wiki-cn",
+      "launchready"
+     ],
+     "alternatives": [
+      "Alibaba Cloud / Tencent CloudBase",
+      "JPush, Getui or vendor push for notifications"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "google-cloud",
+   "name": "Google Cloud APIs",
+   "category": "cloud",
+   "impact": "critical",
+   "side": "server",
+   "hosts": [
+    "storage.googleapis.com",
+    "cloudfunctions.net",
+    "run.app",
+    "appspot.com",
+    "aiplatform.googleapis.com",
+    "translation.googleapis.com",
+    "vision.googleapis.com",
+    "speech.googleapis.com",
+    "texttospeech.googleapis.com",
+    "pubsub.googleapis.com",
+    "bigquery.googleapis.com"
+   ],
+   "packages": {
+    "npm": [
+     "@google-cloud/*",
+     "googleapis"
+    ],
+    "pypi": [
+     "google-cloud-*",
+     "google-api-python-client"
+    ],
+    "go": [
+     "cloud.google.com/go*",
+     "google.golang.org/api*"
+    ],
+    "maven": [
+     "com.google.cloud:*"
+    ],
+    "composer": [
+     "google/cloud-*",
+     "google/apiclient"
+    ],
+    "gem": [
+     "google-cloud-*"
+    ]
+   },
+   "why": "Server or client code calls Google Cloud. Accounts and API calls from sanctioned countries are refused.",
+   "fa": "کد شما به Google Cloud وصل می‌شود؛ حساب و درخواست‌ها از کشورهای تحریم‌شده رد می‌شوند.",
+   "fix": "Check where this code runs. If the server is outside the country only the client parts matter; otherwise use a local cloud provider.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "sources": [
+      "gcp-terms",
+      "fikaro"
+     ],
+     "alternatives": [
+      "ArvanCloud Object Storage (S3 API)",
+      "Liara",
+      "MinIO (self-hosted)"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn",
+      "launchready"
+     ],
+     "alternatives": [
+      "Alibaba Cloud",
+      "Tencent Cloud"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Yandex Cloud",
+      "VK Cloud"
+     ]
+    }
+   }
+  },
+  {
+   "id": "google-signin",
+   "name": "Sign in with Google",
+   "category": "auth",
+   "impact": "high",
+   "side": "client",
+   "hosts": [
+    "accounts.google.com",
+    "apis.google.com",
+    "oauth2.googleapis.com"
+   ],
+   "packages": {
+    "npm": [
+     "@react-oauth/google",
+     "react-google-login",
+     "vue3-google-login",
+     "@abacritt/angularx-social-login"
+    ],
+    "pub": [
+     "google_sign_in"
+    ],
+    "maven": [
+     "com.google.android.gms:play-services-auth"
+    ],
+    "pod": [
+     "GoogleSignIn"
+    ]
+   },
+   "why": "If it is the only login option, users in the region cannot get in.",
+   "fa": "اگر تنها روش ورود باشد، کاربران آن کشور نمی‌توانند وارد شوند.",
+   "fix": "Always offer a non-Google login (email OTP, phone OTP, passkeys).",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn",
+      "launchready"
+     ],
+     "alternatives": [
+      "WeChat Login",
+      "Phone OTP",
+      "Passkeys"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "SMS OTP via Kavenegar / Ghasedak",
+      "Email OTP",
+      "Passkeys"
+     ]
+    },
+    "RU": {
+     "status": "ok",
+     "alternatives": [
+      "VK ID",
+      "Yandex ID"
+     ]
+    }
+   }
+  },
+  {
+   "id": "gemini-api",
+   "name": "Gemini API",
+   "category": "ai",
+   "impact": "critical",
+   "side": "server",
+   "hosts": [
+    "generativelanguage.googleapis.com",
+    "aistudio.google.com"
+   ],
+   "packages": {
+    "npm": [
+     "@google/generative-ai",
+     "@google/genai",
+     "@ai-sdk/google"
+    ],
+    "pypi": [
+     "google-generativeai",
+     "google-genai",
+     "langchain-google-genai"
+    ],
+    "go": [
+     "github.com/google/generative-ai-go*",
+     "google.golang.org/genai*"
+    ],
+    "pub": [
+     "google_generative_ai"
+    ]
+   },
+   "why": "The Gemini API refuses requests from countries outside its availability list.",
+   "fa": "API جمنای درخواست‌های کشورهای خارج از فهرست پشتیبانی را رد می‌کند.",
+   "fix": "Call the model from a server in a supported region, or use an open-weights model you host yourself.",
+   "countries": {
+    "IR": {
+     "status": "unavailable",
+     "sources": [
+      "gemini-regions"
+     ],
+     "alternatives": [
+      "Self-hosted open models (Ollama, vLLM)",
+      "AvalAI / GapGPT (Iranian AI gateways)"
+     ]
+    },
+    "CN": {
+     "status": "unavailable",
+     "sources": [
+      "gemini-regions"
+     ],
+     "alternatives": [
+      "Qwen (Alibaba)",
+      "DeepSeek",
+      "Self-hosted open models"
+     ]
+    },
+    "RU": {
+     "status": "unavailable",
+     "sources": [
+      "gemini-regions"
+     ],
+     "alternatives": [
+      "YandexGPT",
+      "GigaChat",
+      "Self-hosted open models"
+     ]
+    }
+   }
+  },
+  {
+   "id": "openai-api",
+   "name": "OpenAI API",
+   "category": "ai",
+   "impact": "critical",
+   "side": "server",
+   "hosts": [
+    "api.openai.com"
+   ],
+   "packages": {
+    "npm": [
+     "openai",
+     "@ai-sdk/openai",
+     "@langchain/openai"
+    ],
+    "pypi": [
+     "openai",
+     "langchain-openai"
+    ],
+    "go": [
+     "github.com/openai/openai-go*",
+     "github.com/sashabaranov/go-openai"
+    ],
+    "pub": [
+     "dart_openai"
+    ],
+    "composer": [
+     "openai-php/client"
+    ],
+    "gem": [
+     "ruby-openai"
+    ]
+   },
+   "why": "OpenAI only serves its listed countries and may suspend accounts used from other locations.",
+   "fa": "OpenAI فقط به کشورهای فهرست‌شده سرویس می‌دهد و ممکن است حساب‌ها را مسدود کند.",
+   "fix": "Run model calls from a server in a supported country, and keep the base URL configurable so OpenAI-compatible providers can be swapped in.",
+   "countries": {
+    "IR": {
+     "status": "unavailable",
+     "sources": [
+      "openai-countries"
+     ],
+     "alternatives": [
+      "AvalAI / GapGPT / Metis (OpenAI-compatible Iranian gateways)",
+      "Self-hosted open models"
+     ]
+    },
+    "CN": {
+     "status": "unavailable",
+     "sources": [
+      "openai-countries"
+     ],
+     "alternatives": [
+      "DeepSeek API (OpenAI-compatible)",
+      "Qwen / DashScope"
+     ]
+    },
+    "RU": {
+     "status": "unavailable",
+     "sources": [
+      "openai-countries"
+     ],
+     "alternatives": [
+      "YandexGPT",
+      "GigaChat"
+     ]
+    }
+   }
+  },
+  {
+   "id": "anthropic-api",
+   "name": "Anthropic API",
+   "category": "ai",
+   "impact": "critical",
+   "side": "server",
+   "hosts": [
+    "api.anthropic.com"
+   ],
+   "packages": {
+    "npm": [
+     "@anthropic-ai/sdk",
+     "@ai-sdk/anthropic",
+     "@langchain/anthropic"
+    ],
+    "pypi": [
+     "anthropic",
+     "langchain-anthropic"
+    ],
+    "go": [
+     "github.com/anthropics/anthropic-sdk-go*"
+    ]
+   },
+   "why": "Anthropic serves only its listed countries and regions.",
+   "fa": "Anthropic فقط به کشورهای فهرست‌شده سرویس می‌دهد.",
+   "fix": "Call the model from a server in a supported region, or put the provider behind a configurable gateway.",
+   "countries": {
+    "IR": {
+     "status": "unavailable",
+     "sources": [
+      "anthropic-countries"
+     ],
+     "alternatives": [
+      "Iranian AI gateways",
+      "Self-hosted open models"
+     ]
+    },
+    "CN": {
+     "status": "unavailable",
+     "sources": [
+      "anthropic-countries"
+     ],
+     "alternatives": [
+      "DeepSeek",
+      "Qwen"
+     ]
+    },
+    "RU": {
+     "status": "unavailable",
+     "sources": [
+      "anthropic-countries"
+     ],
+     "alternatives": [
+      "YandexGPT",
+      "GigaChat"
+     ]
+    }
+   }
+  },
+  {
+   "id": "sentry",
+   "name": "Sentry",
+   "category": "monitoring",
+   "impact": "low",
+   "side": "both",
+   "hosts": [
+    "ingest.sentry.io",
+    "ingest.us.sentry.io",
+    "ingest.de.sentry.io",
+    "browser.sentry-cdn.com",
+    "js.sentry-cdn.com",
+    "sentry.io"
+   ],
+   "packages": {
+    "npm": [
+     "@sentry/*"
+    ],
+    "pypi": [
+     "sentry-sdk",
+     "raven"
+    ],
+    "go": [
+     "github.com/getsentry/sentry-go"
+    ],
+    "pub": [
+     "sentry_flutter",
+     "sentry"
+    ],
+    "maven": [
+     "io.sentry:*"
+    ],
+    "pod": [
+     "Sentry"
+    ],
+    "composer": [
+     "sentry/sentry",
+     "sentry/sentry-laravel"
+    ],
+    "gem": [
+     "sentry-ruby",
+     "sentry-rails"
+    ]
+   },
+   "why": "Error reports from the region are lost, so you will not see crashes there. A loader script in <head> can delay rendering.",
+   "fa": "گزارش خطاهای آن کشور گم می‌شود و کرش‌ها را نمی‌بینید.",
+   "fix": "Self-host error tracking with a Sentry-compatible server and point the DSN at it.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Fikaro's 2026-10-08 test from Iran was refused.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "GlitchTip (self-hosted, Sentry-SDK compatible)",
+      "Self-hosted Sentry"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "GlitchTip (self-hosted)"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "gitlab-com",
+   "name": "GitLab.com",
+   "category": "devtools",
+   "impact": "medium",
+   "side": "server",
+   "hosts": [
+    "gitlab.com",
+    "registry.gitlab.com"
+   ],
+   "why": "CI includes, git dependencies or container images pulled from gitlab.com fail in builds that run inside the country.",
+   "fa": "include های CI، وابستگی‌های git یا ایمیج‌هایی که از gitlab.com کشیده می‌شوند در بیلد داخل کشور شکست می‌خورند.",
+   "fix": "Mirror the dependency into a registry you control.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Fikaro's 2026-10-08 test from Iran got a 403.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "GitHub (available in Iran)",
+      "Self-hosted GitLab CE / Gitea / Forgejo"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Gitee",
+      "Self-hosted Gitea"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "mongodb-atlas",
+   "name": "MongoDB Atlas",
+   "category": "database",
+   "impact": "critical",
+   "side": "server",
+   "hosts": [
+    "mongodb.net",
+    "cloud.mongodb.com"
+   ],
+   "why": "A managed database cluster. If your servers or developers are in the country they cannot reach it.",
+   "fa": "دیتابیس مدیریت‌شده؛ اگر سرور یا توسعه‌دهنده داخل کشور باشد به آن دسترسی ندارد.",
+   "fix": "Host MongoDB yourself or use a local managed provider.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Fikaro's 2026-10-08 test: the site returned a CloudFront country block and Atlas did not respond.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "Self-hosted MongoDB / FerretDB",
+      "Liara / Hamravesh managed databases"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "neon",
+   "name": "Neon Postgres",
+   "category": "database",
+   "impact": "critical",
+   "side": "server",
+   "hosts": [
+    "neon.tech"
+   ],
+   "packages": {
+    "npm": [
+     "@neondatabase/serverless"
+    ]
+   },
+   "why": "A managed database. Servers inside the country cannot reach it.",
+   "fa": "دیتابیس مدیریت‌شده؛ از داخل کشور در دسترس نیست.",
+   "fix": "Use self-hosted or locally hosted Postgres.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Fikaro's 2026-10-08 test from Iran could not reach the console.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "Self-hosted Postgres",
+      "Liara / ArvanCloud managed Postgres"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "notion-api",
+   "name": "Notion API",
+   "category": "saas",
+   "impact": "medium",
+   "side": "server",
+   "hosts": [
+    "api.notion.com"
+   ],
+   "packages": {
+    "npm": [
+     "@notionhq/client"
+    ],
+    "pypi": [
+     "notion-client"
+    ]
+   },
+   "why": "Integrations that read or write Notion fail from inside the country.",
+   "fa": "یکپارچه‌سازی با Notion از داخل کشور کار نمی‌کند.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Fikaro's 2026-10-08 test from Iran hit a Cloudflare block.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "AppFlowy / Outline (self-hosted)"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "atlassian",
+   "name": "Atlassian Cloud (Jira, Confluence)",
+   "category": "saas",
+   "impact": "medium",
+   "side": "server",
+   "hosts": [
+    "atlassian.net",
+    "api.atlassian.com"
+   ],
+   "packages": {
+    "npm": [
+     "jira-client",
+     "jira.js"
+    ],
+    "pypi": [
+     "jira",
+     "atlassian-python-api"
+    ]
+   },
+   "why": "Jira and Confluence automations fail from inside the country.",
+   "fa": "اتوماسیون‌های Jira و Confluence از داخل کشور کار نمی‌کنند.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "Plane / Taiga / OpenProject (self-hosted)"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "stripe",
+   "name": "Stripe",
+   "category": "payments",
+   "impact": "critical",
+   "side": "both",
+   "hosts": [
+    "js.stripe.com",
+    "api.stripe.com",
+    "checkout.stripe.com",
+    "m.stripe.network"
+   ],
+   "packages": {
+    "npm": [
+     "stripe",
+     "@stripe/stripe-js",
+     "@stripe/react-stripe-js",
+     "@stripe/stripe-react-native"
+    ],
+    "pypi": [
+     "stripe",
+     "dj-stripe"
+    ],
+    "go": [
+     "github.com/stripe/stripe-go*"
+    ],
+    "pub": [
+     "flutter_stripe"
+    ],
+    "maven": [
+     "com.stripe:*"
+    ],
+    "composer": [
+     "stripe/stripe-php"
+    ],
+    "gem": [
+     "stripe"
+    ],
+    "pod": [
+     "Stripe",
+     "StripePaymentSheet"
+    ]
+   },
+   "why": "Stripe does not offer accounts in these countries, and cards issued there usually cannot pay.",
+   "fa": "استرایپ در این کشورها حساب نمی‌دهد و کارت‌های صادرشده آنجا معمولاً پرداخت نمی‌شوند.",
+   "fix": "Put payments behind a provider interface and add a local gateway per market.",
+   "countries": {
+    "IR": {
+     "status": "unavailable",
+     "sources": [
+      "stripe-global"
+     ],
+     "alternatives": [
+      "Zarinpal",
+      "Zibal",
+      "IDPay",
+      "Pay.ir (Shaparak gateways)"
+     ]
+    },
+    "CN": {
+     "status": "unavailable",
+     "note": "No accounts for mainland China businesses (Hong Kong only).",
+     "sources": [
+      "stripe-global"
+     ],
+     "alternatives": [
+      "Alipay",
+      "WeChat Pay",
+      "UnionPay"
+     ]
+    },
+    "RU": {
+     "status": "unavailable",
+     "sources": [
+      "stripe-global"
+     ],
+     "alternatives": [
+      "YooKassa",
+      "CloudPayments",
+      "Tinkoff Acquiring"
+     ]
+    }
+   }
+  },
+  {
+   "id": "paypal",
+   "name": "PayPal",
+   "category": "payments",
+   "impact": "critical",
+   "side": "both",
+   "hosts": [
+    "www.paypal.com",
+    "api.paypal.com",
+    "api-m.paypal.com",
+    "www.paypalobjects.com"
+   ],
+   "packages": {
+    "npm": [
+     "@paypal/react-paypal-js",
+     "@paypal/paypal-js",
+     "@paypal/checkout-server-sdk",
+     "@paypal/paypal-server-sdk"
+    ],
+    "pypi": [
+     "paypalrestsdk",
+     "paypal-server-sdk"
+    ],
+    "composer": [
+     "paypal/rest-api-sdk-php",
+     "paypal/paypal-checkout-sdk"
+    ]
+   },
+   "why": "PayPal does not serve these countries, so users there cannot pay with it.",
+   "fa": "پی‌پال در این کشورها فعال نیست و کاربران نمی‌توانند پرداخت کنند.",
+   "countries": {
+    "IR": {
+     "status": "unavailable",
+     "sources": [
+      "paypal-countries"
+     ],
+     "alternatives": [
+      "Zarinpal",
+      "Zibal",
+      "IDPay"
+     ]
+    },
+    "RU": {
+     "status": "unavailable",
+     "note": "PayPal suspended services in Russia in March 2022.",
+     "sources": [
+      "paypal-countries",
+      "wiki-ru"
+     ],
+     "alternatives": [
+      "YooKassa",
+      "CloudPayments"
+     ]
+    },
+    "CN": {
+     "status": "ok",
+     "alternatives": [
+      "Alipay",
+      "WeChat Pay (preferred by local users)"
+     ]
+    }
+   }
+  },
+  {
+   "id": "youtube-embed",
+   "ooni": "www.youtube.com",
+   "name": "YouTube embeds",
+   "category": "media",
+   "impact": "medium",
+   "side": "client",
+   "hosts": [
+    "youtube.com",
+    "www.youtube.com",
+    "youtube-nocookie.com",
+    "www.youtube-nocookie.com",
+    "youtu.be",
+    "i.ytimg.com",
+    "ytimg.com"
+   ],
+   "packages": {
+    "npm": [
+     "react-youtube",
+     "vue-youtube",
+     "lite-youtube-embed",
+     "@angular/youtube-player",
+     "youtube-player"
+    ],
+    "pub": [
+     "youtube_player_flutter",
+     "youtube_player_iframe"
+    ]
+   },
+   "why": "Embedded videos show an empty box. Pages built around a video lose their main content.",
+   "fa": "ویدیوهای embed جعبهٔ خالی نشان می‌دهند.",
+   "fix": "Self-host the video (HLS) or embed it from a local platform for that market.",
+   "countries": {
+    "IR": {
+     "status": "blocked",
+     "sources": [
+      "wiki-ir",
+      "ooni"
+     ],
+     "alternatives": [
+      "Aparat embed",
+      "Self-hosted HLS (e.g. ArvanCloud VOD)"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "Bilibili",
+      "Youku",
+      "Tencent Video"
+     ]
+    },
+    "RU": {
+     "status": "degraded",
+     "note": "Heavily throttled since 2024.",
+     "sources": [
+      "wiki-ru",
+      "ooni"
+     ],
+     "alternatives": [
+      "RUTUBE",
+      "VK Video"
+     ]
+    }
+   }
+  },
+  {
+   "id": "vimeo-embed",
+   "ooni": "vimeo.com",
+   "name": "Vimeo embeds",
+   "category": "media",
+   "impact": "medium",
+   "side": "client",
+   "hosts": [
+    "player.vimeo.com",
+    "vimeo.com",
+    "i.vimeocdn.com"
+   ],
+   "packages": {
+    "npm": [
+     "@vimeo/player",
+     "react-vimeo",
+     "@u-wave/react-vimeo"
+    ]
+   },
+   "why": "Embedded videos do not play.",
+   "fa": "ویدیوهای Vimeo پخش نمی‌شوند.",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "Bilibili",
+      "Self-hosted HLS"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Aparat",
+      "Self-hosted HLS"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "twitter-embed",
+   "ooni": "twitter.com",
+   "name": "X / Twitter widgets",
+   "category": "social",
+   "impact": "low",
+   "side": "client",
+   "hosts": [
+    "platform.twitter.com",
+    "syndication.twitter.com",
+    "twitter.com",
+    "x.com",
+    "abs.twimg.com",
+    "pbs.twimg.com"
+   ],
+   "packages": {
+    "npm": [
+     "react-twitter-embed",
+     "react-tweet"
+    ]
+   },
+   "why": "Embedded posts and timelines stay empty, and the script may hang until it times out.",
+   "fa": "پست‌ها و تایم‌لاین‌های embed خالی می‌مانند.",
+   "fix": "Render a static snapshot of the post on the server.",
+   "countries": {
+    "IR": {
+     "status": "blocked",
+     "sources": [
+      "wiki-ir",
+      "ooni"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "Weibo"
+     ]
+    },
+    "RU": {
+     "status": "blocked",
+     "note": "Restricted since March 2022.",
+     "sources": [
+      "wiki-ru",
+      "ooni"
+     ]
+    }
+   }
+  },
+  {
+   "id": "meta-sdk",
+   "ooni": "www.facebook.com",
+   "name": "Facebook / Instagram SDK, Pixel and embeds",
+   "category": "social",
+   "impact": "low",
+   "side": "client",
+   "hosts": [
+    "connect.facebook.net",
+    "facebook.com",
+    "www.facebook.com",
+    "graph.facebook.com",
+    "instagram.com",
+    "www.instagram.com",
+    "cdninstagram.com",
+    "fbcdn.net"
+   ],
+   "packages": {
+    "npm": [
+     "react-facebook-pixel",
+     "react-facebook",
+     "react-facebook-login",
+     "@greatsumini/react-facebook-login",
+     "react-instagram-embed"
+    ],
+    "pub": [
+     "flutter_facebook_auth",
+     "facebook_app_events"
+    ],
+    "maven": [
+     "com.facebook.android:*"
+    ],
+    "pod": [
+     "FBSDKCoreKit",
+     "FBSDKLoginKit"
+    ]
+   },
+   "why": "Pixel data is lost, embeds stay empty, and 'Login with Facebook' does not work.",
+   "fa": "پیکسل و embed و «ورود با فیسبوک» کار نمی‌کنند.",
+   "countries": {
+    "IR": {
+     "status": "blocked",
+     "note": "Facebook has been blocked since 2009 and Instagram since 2022.",
+     "sources": [
+      "wiki-ir",
+      "ooni"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "WeChat",
+      "Weibo"
+     ]
+    },
+    "RU": {
+     "status": "blocked",
+     "note": "Blocked since March 2022.",
+     "sources": [
+      "wiki-ru",
+      "ooni"
+     ],
+     "alternatives": [
+      "VK"
+     ]
+    }
+   }
+  },
+  {
+   "id": "telegram",
+   "ooni": "telegram.org",
+   "name": "Telegram widgets and Bot API",
+   "category": "social",
+   "impact": "medium",
+   "side": "both",
+   "hosts": [
+    "telegram.org",
+    "api.telegram.org",
+    "t.me",
+    "core.telegram.org"
+   ],
+   "packages": {
+    "npm": [
+     "node-telegram-bot-api",
+     "telegraf",
+     "grammy",
+     "telegram",
+     "@telegram-apps/sdk"
+    ],
+    "pypi": [
+     "python-telegram-bot",
+     "aiogram",
+     "pyTelegramBotAPI",
+     "telethon",
+     "pyrogram"
+    ],
+    "go": [
+     "github.com/go-telegram-bot-api/telegram-bot-api*",
+     "github.com/go-telegram/bot",
+     "gopkg.in/telebot*"
+    ],
+    "composer": [
+     "irazasyed/telegram-bot-sdk",
+     "telegram-bot/api"
+    ]
+   },
+   "why": "A login widget or share button will not load. A bot whose server is inside the country cannot reach api.telegram.org.",
+   "fa": "ویجت ورود یا ربات تلگرام؛ اگر سرور ربات داخل کشور باشد به api.telegram.org وصل نمی‌شود.",
+   "fix": "Host the bot outside the country (or behind a relay), and offer a local messenger option.",
+   "countries": {
+    "IR": {
+     "status": "blocked",
+     "note": "Blocked since 2018.",
+     "sources": [
+      "wiki-ir",
+      "ooni"
+     ],
+     "alternatives": [
+      "Bale Bot API",
+      "Eitaa",
+      "Rubika"
+     ]
+    },
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "WeChat Official Accounts"
+     ]
+    },
+    "RU": {
+     "status": "ok",
+     "note": "Unblocked in 2020.",
+     "sources": [
+      "wiki-ru"
+     ]
+    }
+   }
+  },
+  {
+   "id": "jsdelivr",
+   "name": "jsDelivr CDN",
+   "category": "cdn",
+   "impact": "medium",
+   "side": "client",
+   "hosts": [
+    "cdn.jsdelivr.net",
+    "fastly.jsdelivr.net"
+   ],
+   "why": "Scripts and styles from a public CDN. If it is slow or down your page breaks too.",
+   "fa": "اسکریپت و استایل از CDN عمومی؛ اگر کند یا قطع شود صفحه هم خراب می‌شود.",
+   "fix": "Bundle or self-host the files (npm install plus your bundler), or add a local fallback.",
+   "countries": {
+    "CN": {
+     "status": "degraded",
+     "note": "jsDelivr lost its China ICP license in December 2021 and serves China from nearby regions. It is reachable but slow (median 660 ms in 2026 tests).",
+     "sources": [
+      "jsdelivr-icp",
+      "cwf-cdn"
+     ],
+     "alternatives": [
+      "Self-host via your bundler",
+      "npmmirror / BootCDN / Staticfile"
+     ]
+    },
+    "IR": {
+     "status": "ok",
+     "alternatives": [
+      "Self-host via your bundler"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "pub-dev",
+   "name": "pub.dev (Flutter/Dart packages)",
+   "category": "devtools",
+   "impact": "medium",
+   "side": "server",
+   "hosts": [
+    "pub.dev",
+    "pub.dartlang.org",
+    "storage.googleapis.com/pub-packages"
+   ],
+   "manifests": [
+    "pubspec.yaml"
+   ],
+   "why": "`flutter pub get` fails or is very slow in CI and on developer machines inside the country.",
+   "fa": "`flutter pub get` روی سیستم توسعه‌دهنده یا CI داخل کشور شکست می‌خورد.",
+   "fix": "Set PUB_HOSTED_URL and FLUTTER_STORAGE_BASE_URL to a mirror.",
+   "countries": {
+    "IR": {
+     "status": "sanctioned",
+     "note": "Fikaro's 2026-10-08 test from Iran was refused.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "PUB_HOSTED_URL=https://pub.flutter-io.cn",
+      "Self-hosted pub mirror (unpub)"
+     ]
+    },
+    "CN": {
+     "status": "degraded",
+     "note": "The Flutter team documents official China mirrors.",
+     "sources": [
+      "flutter-china"
+     ],
+     "alternatives": [
+      "PUB_HOSTED_URL=https://pub.flutter-io.cn",
+      "FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "play-services",
+   "name": "Google Play services (Android)",
+   "category": "mobile",
+   "impact": "high",
+   "side": "client",
+   "packages": {
+    "maven": [
+     "com.google.android.gms:*",
+     "com.google.android.play:*"
+    ],
+    "pub": [
+     "in_app_review",
+     "in_app_update"
+    ]
+   },
+   "why": "Most Android phones sold in mainland China do not have Google Play services, so anything that depends on GMS (push, location, ads, in-app review) fails.",
+   "fa": "بیشتر گوشی‌های اندرویدی چین سرویس‌های گوگل‌پلی ندارند.",
+   "fix": "Detect GMS at runtime and fall back to HMS or vendor SDKs.",
+   "countries": {
+    "CN": {
+     "status": "unavailable",
+     "sources": [
+      "wiki-cn",
+      "launchready"
+     ],
+     "alternatives": [
+      "Huawei HMS Core",
+      "Vendor push (Xiaomi, OPPO, vivo)"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "note": "GMS is present on phones, but Play developer services are sanctioned (Fikaro).",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "Cafe Bazaar / Myket in-app billing"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "google-ads",
+   "name": "Google AdSense / AdMob / Ads",
+   "category": "ads",
+   "impact": "low",
+   "side": "client",
+   "hosts": [
+    "pagead2.googlesyndication.com",
+    "googlesyndication.com",
+    "googleadservices.com",
+    "www.googleadservices.com",
+    "securepubads.g.doubleclick.net",
+    "doubleclick.net"
+   ],
+   "packages": {
+    "npm": [
+     "react-google-adsense",
+     "@ctrl/react-adsense",
+     "vue-google-adsense"
+    ],
+    "pub": [
+     "google_mobile_ads"
+    ],
+    "maven": [
+     "com.google.android.gms:play-services-ads*"
+    ],
+    "pod": [
+     "Google-Mobile-Ads-SDK"
+    ]
+   },
+   "why": "Ad slots stay empty, so there is no revenue from the region.",
+   "fa": "جای تبلیغ خالی می‌ماند و درآمدی از آن کشور ندارید.",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn",
+      "launchready"
+     ],
+     "alternatives": [
+      "Baidu Union",
+      "Tencent Ads"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Yektanet",
+      "Tapsell",
+      "Adivery"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Yandex Advertising Network"
+     ]
+    }
+   }
+  },
+  {
+   "id": "google-translate",
+   "name": "Google Translate widget",
+   "category": "i18n",
+   "impact": "low",
+   "side": "client",
+   "hosts": [
+    "translate.google.com",
+    "translate.googleapis.com"
+   ],
+   "why": "The language switcher stops working.",
+   "fa": "سوییچر زبان کار نمی‌کند.",
+   "fix": "Ship real translations.",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "wiki-cn"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "google-apis-cdn",
+   "name": "Google Hosted Libraries",
+   "category": "cdn",
+   "impact": "high",
+   "side": "client",
+   "hosts": [
+    "ajax.googleapis.com"
+   ],
+   "why": "jQuery, Angular and other libraries loaded from Google's CDN fail, which often breaks the whole page.",
+   "fa": "کتابخانه‌هایی مثل jQuery که از CDN گوگل لود می‌شوند شکست می‌خورند و کل صفحه خراب می‌شود.",
+   "fix": "Bundle or self-host the library.",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "cwf-cdn",
+      "cwf-wp"
+     ],
+     "alternatives": [
+      "Self-host",
+      "BootCDN / Staticfile"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Self-host"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "gravatar",
+   "ooni": "gravatar.com",
+   "name": "Gravatar",
+   "category": "media",
+   "impact": "low",
+   "side": "client",
+   "hosts": [
+    "gravatar.com",
+    "www.gravatar.com",
+    "secure.gravatar.com",
+    "0.gravatar.com"
+   ],
+   "why": "Avatars show broken images.",
+   "fa": "آواتارها تصویر شکسته نشان می‌دهند.",
+   "fix": "Generate avatars locally (initials or identicons), or proxy and cache them.",
+   "countries": {
+    "CN": {
+     "status": "blocked",
+     "sources": [
+      "cwf-wp",
+      "wiki-cn"
+     ],
+     "alternatives": [
+      "Cravatar",
+      "Local identicons"
+     ]
+    },
+    "IR": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    },
+    "RU": {
+     "status": "ok"
+    }
+   }
+  },
+  {
+   "id": "docker-hub",
+   "name": "Docker Hub",
+   "category": "devtools",
+   "impact": "medium",
+   "side": "server",
+   "hosts": [
+    "registry-1.docker.io",
+    "hub.docker.com",
+    "index.docker.io",
+    "auth.docker.io"
+   ],
+   "manifests": [
+    "Dockerfile",
+    "docker-compose.yml",
+    "docker-compose.yaml",
+    "compose.yml",
+    "compose.yaml"
+   ],
+   "why": "Image pulls in CI or on servers inside the country fail or get rate-limited.",
+   "fa": "pull ایمیج در CI یا سرور داخل کشور شکست می‌خورد یا محدود می‌شود.",
+   "fix": "Configure a registry mirror, and use `sabr docker pull` for resumable pulls on bad links.",
+   "countries": {
+    "IR": {
+     "status": "ok",
+     "note": "Refused Iranian IPs for years, but was reachable in the 2026-10-08 Fikaro test. Keep a mirror configured.",
+     "sources": [
+      "fikaro"
+     ],
+     "alternatives": [
+      "docker.arvancloud.ir mirror",
+      "Self-hosted registry mirror",
+      "sabr docker pull (resumable)"
+     ]
+    },
+    "CN": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ],
+     "alternatives": [
+      "Alibaba Cloud ACR mirror",
+      "Self-hosted mirror"
+     ]
+    },
+    "RU": {
+     "status": "unknown",
+     "sources": [
+      "ooni"
+     ]
+    }
+   }
+  }
+ ]
+}

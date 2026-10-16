@@ -1,0 +1,4 @@
+dist/
+/marz
+*.exe
+marz.sarif

@@ -1,0 +1,165 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        go: [stable]
+        include:
+          - os: ubuntu-latest
+            go: '1.22'
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go vet ./...
+      - name: gofmt
+        if: runner.os == 'Linux'
+        run: test -z "$(gofmt -l .)"
+      - run: go test -count=1 ./...
+
+  wasm:
+    # the browser demo runs the real scanner compiled to WebAssembly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: build and run marz.wasm under Node
+        run: |
+          GOOS=js GOARCH=wasm go build -trimpath -ldflags="-s -w" -o /tmp/marz.wasm ./cmd/marzwasm
+          cat > /tmp/t.js <<'JS'
+          require(process.argv[2] + '/wasm_exec.js');
+          const fs = require('fs'); const go = new Go();
+          WebAssembly.instantiate(fs.readFileSync('/tmp/marz.wasm'), go.importObject).then(r => {
+            go.run(r.instance);
+            const out = JSON.parse(marz.scan([{path: 'package.json', content: '{"dependencies":{"firebase":"1"}}'}], 'IR'));
+            const f = out.result.findings[0];
+            if (f.rule !== 'firebase' || f.verdicts[0].status !== 'sanctioned') { console.error(JSON.stringify(out)); process.exit(1); }
+            console.log('wasm ok:', f.rule, f.verdicts[0].status); process.exit(0);
+          });
+          JS
+          node /tmp/t.js "$(go env GOROOT)/lib/wasm"
+
+  real-network:
+    # live services: OONI, Google Fonts, real TLS endpoints
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - run: go build -o /usr/local/bin/marz ./cmd/marz
+      - name: OONI says YouTube is blocked in Iran
+        run: |
+          marz check www.youtube.com --country IR | tee out.txt
+          grep -E "IR www.youtube.com +(blocked|likely blocked)" out.txt
+      - name: probe real endpoints
+        run: marz probe fonts.googleapis.com api.openai.com registry-1.docker.io -v
+      - name: self-host Google Fonts for real, then the finding is gone
+        run: |
+          cp -r testdata/demo /tmp/demo && cd /tmp/demo
+          marz scan --country CN | grep -q "Google Fonts"
+          marz fix fonts --write
+          ls public/fonts/*.woff2
+          ! grep -rq fonts.googleapis.com public/index.html
+          ! marz scan --country CN | grep -q "Google Fonts"
+
+  action:
+    # the composite action itself, built from this commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: build a local release for the action to install
+        run: sh scripts/build.sh 0.0.0-ci
+      - name: run the action (expected to fail on the demo app)
+        id: demo
+        continue-on-error: true
+        uses: ./
+        env:
+          MARZ_BASE_URL: file://${{ github.workspace }}/dist
+        with:
+          path: testdata/demo
+          countries: IR
+          fail-on: critical
+          sarif: 'true'
+      - name: check it failed and wrote SARIF
+        run: |
+          test "${{ steps.demo.outcome }}" = failure
+          test -s marz.sarif
+          grep -q '"ruleId": "marz/firebase"' marz.sarif
+
+  installer-unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: build release assets
+        run: |
+          if [ "$RUNNER_OS" = macOS ]; then sed -i '' 's/sha256sum marz_\*/shasum -a 256 marz_*/' scripts/build.sh; fi
+          sh scripts/build.sh 0.0.0-ci
+      - name: curl | sh into a fresh HOME
+        run: |
+          h=$(mktemp -d)
+          cat docs/install.sh | env -i HOME="$h" PATH=/usr/bin:/bin:/usr/sbin:/sbin MARZ_BASE_URL="file://$PWD/dist" sh
+          "$h/.local/bin/marz" version | grep -q "^marz 0.0.0-ci"
+          grep -q '.local/bin' "$h/.profile"
+      - name: a tampered binary is refused
+        run: |
+          os=$(uname -s | tr '[:upper:]' '[:lower:]'); arch=$( [ "$(uname -m)" = arm64 ] || [ "$(uname -m)" = aarch64 ] && echo arm64 || echo amd64 )
+          printf 'evil' >> "dist/marz_${os}_${arch}"
+          h=$(mktemp -d)
+          if env -i HOME="$h" PATH=/usr/bin:/bin MARZ_BASE_URL="file://$PWD/dist" sh docs/install.sh; then echo "::error::tampered binary installed"; exit 1; fi
+
+  installer-windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [pwsh, powershell]
+    runs-on: windows-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: build windows asset
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          $env:CGO_ENABLED = '0'
+          go build -ldflags "-X main.version=0.0.0-ci" -o dist/marz_windows_amd64.exe ./cmd/marz
+          $h = (Get-FileHash -Algorithm SHA256 dist/marz_windows_amd64.exe).Hash.ToLower()
+          Set-Content -Encoding ASCII dist/SHA256SUMS "$h  marz_windows_amd64.exe"
+      - name: irm | iex
+        run: |
+          $env:MARZ_BASE_URL = (Resolve-Path dist).Path
+          $env:MARZ_BIN_DIR = Join-Path $env:RUNNER_TEMP 'marz-bin'
+          Get-Content -Raw docs/install.ps1 | Invoke-Expression
+          $v = & (Join-Path $env:MARZ_BIN_DIR 'marz.exe') version
+          if ($v -notmatch '^marz 0\.0\.0-ci') { throw "bad version $v" }
+          if (-not ([Environment]::GetEnvironmentVariable('Path', 'User') -split ';' -contains $env:MARZ_BIN_DIR)) { throw 'user PATH not updated' }

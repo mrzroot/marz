@@ -1,0 +1,11 @@
+{
+  "name": "shop",
+  "private": true,
+  "dependencies": {
+    "firebase": "^11.0.0",
+    "@react-google-maps/api": "^2.20.0",
+    "@stripe/stripe-js": "^5.0.0",
+    "@sentry/react": "^8.0.0",
+    "react": "^19.0.0"
+  }
+}

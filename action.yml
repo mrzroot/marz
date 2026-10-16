@@ -1,0 +1,51 @@
+name: marz region check
+description: Fail the build when your app depends on services that are blocked, sanctioned or unavailable in Iran, China or Russia.
+author: mrzroot
+branding:
+  icon: globe
+  color: green
+inputs:
+  path:
+    description: Directory to scan
+    default: .
+  countries:
+    description: Comma-separated country codes (IR, CN, RU) or "all"
+    default: all
+  fail-on:
+    description: Fail at or above this severity (critical, high, medium, low, never)
+    default: high
+  sarif:
+    description: Also write marz.sarif for github/codeql-action/upload-sarif
+    default: 'false'
+  version:
+    description: marz release tag to use (e.g. v0.1.0), default latest
+    default: ''
+outputs:
+  sarif-file:
+    description: Path of the SARIF file when sarif is true
+    value: ${{ steps.run.outputs.sarif-file }}
+runs:
+  using: composite
+  steps:
+    - name: install marz
+      shell: bash
+      env:
+        MARZ_VERSION: ${{ inputs.version }}
+        MARZ_BIN_DIR: ${{ runner.temp }}/marz-bin
+      run: |
+        if [ "$RUNNER_OS" = Windows ]; then
+          pwsh -NoProfile -Command "Get-Content -Raw '${{ github.action_path }}/docs/install.ps1' | Invoke-Expression"
+        else
+          sh "${{ github.action_path }}/docs/install.sh"
+        fi
+        echo "$MARZ_BIN_DIR" >> "$GITHUB_PATH"
+    - name: scan
+      id: run
+      shell: bash
+      run: |
+        marz scan "${{ inputs.path }}" --country "${{ inputs.countries }}" --format md >> "$GITHUB_STEP_SUMMARY"
+        if [ "${{ inputs.sarif }}" = true ]; then
+          marz scan "${{ inputs.path }}" --country "${{ inputs.countries }}" --format sarif -o marz.sarif
+          echo "sarif-file=marz.sarif" >> "$GITHUB_OUTPUT"
+        fi
+        FORCE_COLOR=1 marz scan "${{ inputs.path }}" --country "${{ inputs.countries }}" --fail-on "${{ inputs.fail-on }}"
