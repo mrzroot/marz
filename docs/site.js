@@ -66,10 +66,6 @@
     localStorage.setItem('marz-lang', root.lang);
     applyLang();
   });
-  $('#theme').addEventListener('click', function () {
-    var n = root.dataset.theme === 'dark' ? 'light' : 'dark';
-    root.dataset.theme = n; localStorage.setItem('marz-theme', n);
-  });
 
   // install tabs + copy
   $$('.tabs button').forEach(function (b) {
