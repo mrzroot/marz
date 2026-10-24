@@ -16,3 +16,16 @@ main{position:relative}
 .hero{position:relative;z-index:1;pointer-events:none}
 .hero a,.hero button,.hero .install,.hero .board,.hero code{pointer-events:auto}
 @media(max-width:520px){.brand-fa{display:none}h1{font-size:clamp(22px,7vw,30px)!important}}
+/* QA: text contrast (AA), light theme */
+html[data-theme=light] .pass.bad .stamp{color:#b3332f}
+html[data-theme=light] .st-unknown{color:#6b6963}
+html[data-theme=light] .find .st-unknown{color:#74726c}
+html[data-theme=light] .find-head .high.sev{color:#be211e}
+html[data-theme=light] .find-head .medium.sev{color:#9a4d00}
+html[data-theme=light] .find-head .low.sev{color:#785f00}
+html[data-theme=light] .info{color:#63615c}
+html[data-theme=light] .st-unavailable{color:#a45200}
+html[data-theme=light] .st-degraded{color:#806500}
+html[data-theme=light] .card h3 code{color:var(--amber-ink)}
+html[data-theme=dark] .find-head .critical.sev{color:#1a0505}
+html[data-theme=light] .pass .stamp{opacity:1}

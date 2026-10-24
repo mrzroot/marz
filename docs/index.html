@@ -23,7 +23,7 @@ html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{backgro
 <body>
 <a class="skip" href="#demo" data-i18n="skip">Skip to the demo</a>
 <header class="top">
-  <a class="brand" href="#" aria-label="marz home"><span class="brand-mark" aria-hidden="true"><i></i><i></i></span><b>marz</b><span class="brand-fa">مرز</span></a>
+  <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"><i></i><i></i></span><b>marz</b><span class="brand-fa">مرز</span></a>
   <nav class="nav" aria-label="Sections">
     <a href="#demo" data-i18n="nav.demo">Demo</a>
     <a href="#install" data-i18n="nav.install">Install</a>
@@ -198,5 +198,6 @@ window.addEventListener('storage',function(e){if(e.key===K||e.key===null)apply(g
 window.addEventListener('pageshow',function(e){if(e.persisted)apply(get(),false)});
 if(window.MutationObserver)new MutationObserver(sync).observe(d,{attributes:true,attributeFilter:['data-lang','lang']});
 /* normalise whatever the boot script set */apply(get(),false)})();</script>
+<script>/* keyboard access for horizontally scrollable code blocks */(function(){function f(){document.querySelectorAll('pre,.code,[id^=c-],#cmd,#c1,#t1').forEach(function(e){if(e.scrollWidth>e.clientWidth+1&&!e.hasAttribute('tabindex'))e.setAttribute('tabindex','0')})}addEventListener('load',f);addEventListener('resize',f);setTimeout(f,1500)})()</script>
 </body>
 </html>
