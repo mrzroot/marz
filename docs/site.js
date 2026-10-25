@@ -193,12 +193,25 @@
   $('#copy-md').onclick = function () { if (lastMd) copyText(lastMd, $('#copy-md')); };
 
   window.onMarzReady = function () { $('#wasm-status').textContent = t('demo.ready'); scan(); };
-  if (window.Go && window.WebAssembly) {
-    var go = new Go();
-    var load = WebAssembly.instantiateStreaming ? WebAssembly.instantiateStreaming(fetch('marz.wasm'), go.importObject).catch(function () { return fetch('marz.wasm').then(function (r) { return r.arrayBuffer(); }).then(function (b) { return WebAssembly.instantiate(b, go.importObject); }); })
-      : fetch('marz.wasm').then(function (r) { return r.arrayBuffer(); }).then(function (b) { return WebAssembly.instantiate(b, go.importObject); });
-    load.then(function (r) { go.run(r.instance); }).catch(function () { $('#wasm-status').textContent = t('demo.fail'); });
-  } else { $('#wasm-status').textContent = t('demo.fail'); }
+  /* the 5 MB scanner compiles on the main thread: start it only when the demo is near the viewport or the visitor interacts */
+  var wasmStarted = false;
+  function startWasm() {
+    if (wasmStarted) return; wasmStarted = true;
+    if (window.Go && window.WebAssembly) {
+      var go = new Go();
+      var load = WebAssembly.instantiateStreaming ? WebAssembly.instantiateStreaming(fetch('marz.wasm'), go.importObject).catch(function () { return fetch('marz.wasm').then(function (r) { return r.arrayBuffer(); }).then(function (b) { return WebAssembly.instantiate(b, go.importObject); }); })
+        : fetch('marz.wasm').then(function (r) { return r.arrayBuffer(); }).then(function (b) { return WebAssembly.instantiate(b, go.importObject); });
+      load.then(function (r) { go.run(r.instance); }).catch(function () { $('#wasm-status').textContent = t('demo.fail'); });
+    } else { $('#wasm-status').textContent = t('demo.fail'); }
+  }
+  (function lazyWasm() {
+    var ev = ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'];
+    function go() { ev.forEach(function (e) { removeEventListener(e, go, true); }); if (io) io.disconnect(); startWasm(); }
+    var io = null;
+    ev.forEach(function (e) { addEventListener(e, go, { capture: true, passive: true, once: true }); });
+    if ('IntersectionObserver' in window) { io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) go(); }, { rootMargin: '0px' }); io.observe($('#demo')); }
+    else setTimeout(go, 3000);
+  })();
 
   if (lang() === 'fa') applyLang();
 })();
