@@ -11,6 +11,7 @@ import (
 	"testing"
 )
 
+// runT runs the CLI in-process and returns the exit code, stdout and stderr.
 func runT(t *testing.T, args ...string) (int, string, string) {
 	t.Helper()
 	var out, errb bytes.Buffer
@@ -18,6 +19,7 @@ func runT(t *testing.T, args ...string) (int, string, string) {
 	return code, out.String(), errb.String()
 }
 
+// demo is a small project with known findings (Firebase, Neshan, ...).
 const demo = "../../testdata/demo"
 
 func TestScanText(t *testing.T) {
@@ -35,7 +37,7 @@ func TestScanText(t *testing.T) {
 	}
 }
 
-func TestScanJSONAndFailOn(t *testing.T) {
+func TestScanJSONForOneCountry(t *testing.T) {
 	code, out, _ := runT(t, "scan", demo, "--format", "json", "--country", "ru")
 	if code != 0 {
 		t.Fatalf("exit %d", code)
@@ -54,12 +56,21 @@ func TestScanJSONAndFailOn(t *testing.T) {
 	if len(res.Countries) != 1 || res.Countries[0] != "RU" || len(res.Findings) < 8 {
 		t.Fatalf("%+v", res)
 	}
-	if code, _, stderr := runT(t, demo, "--fail-on", "critical", "-f", "json"); code != 1 || !strings.Contains(stderr, "critical") {
+}
+
+func TestFailOnCriticalExitsOne(t *testing.T) {
+	code, _, stderr := runT(t, demo, "--fail-on", "critical", "-f", "json")
+	if code != 1 || !strings.Contains(stderr, "critical") {
 		t.Fatalf("fail-on exit %d %q", code, stderr)
 	}
-	// Russia: only "low" or worse? Docker/info must not trip --fail-on low on a clean dir.
+}
+
+// Informational findings (a plain Dockerfile) must not trip --fail-on low on an otherwise clean directory.
+func TestFailOnLowIgnoresInfoFindings(t *testing.T) {
 	dir := t.TempDir()
-	os.WriteFile(filepath.Join(dir, "Dockerfile"), []byte("FROM alpine\n"), 0o644)
+	if err := os.WriteFile(filepath.Join(dir, "Dockerfile"), []byte("FROM alpine\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
 	if code, _, _ := runT(t, dir, "--fail-on", "low"); code != 0 {
 		t.Fatalf("info finding failed the build: %d", code)
 	}
