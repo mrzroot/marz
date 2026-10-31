@@ -11,12 +11,20 @@ marz scans a code base for services that are **blocked**, **sanctioned** or **un
 [![CI](https://github.com/mrzroot/marz/actions/workflows/ci.yml/badge.svg)](https://github.com/mrzroot/marz/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/mrzroot/marz)](https://github.com/mrzroot/marz/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Go 1.22+](https://img.shields.io/badge/go-1.22%2B-00ADD8)
 
-[Website and live demo](https://mrzroot.github.io/marz/) · [فارسی](README.fa.md)
+[Website and live demo](https://mrzroot.github.io/marz/) · [فارسی](README.fa.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
 *Marz* (مرز) is Persian for "border".
+
+### ⚡ Quickstart
+
+```sh
+curl -fsSL https://mrzroot.github.io/marz/install.sh | sh
+cd your-app && marz          # which services break in Iran, China and Russia, and what to use instead
+```
 
 ## Why
 
@@ -131,6 +139,12 @@ The closest is China Site Scanner, which checks a deployed site for China only. 
 - API endpoints probed without a key may answer "needs a key" before they would answer "wrong country".
 - The "where" tag (client, server, build) is a guess from the file path. A server-side call only matters if your server runs in the affected country.
 - marz is not legal advice about sanctions compliance.
+
+## Contributing
+
+Bug reports, ideas and pull requests are welcome, in English or Persian. Start with
+[CONTRIBUTING.md](CONTRIBUTING.md) (setup, where the code lives, how to test) and the
+[issue forms](https://github.com/mrzroot/marz/issues/new/choose). Release history is in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
