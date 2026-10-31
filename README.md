@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/banner.svg" alt="marz (مرز): will your app work in Iran, China and Russia?" width="100%">
+
 # marz
 
 **Will your app work in Iran, China and Russia?**
