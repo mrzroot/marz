@@ -1,0 +1,32 @@
+name: 🗺 Knowledge base correction
+description: A service is missing, or its status in a country is wrong or out of date.
+labels: [knowledge-base]
+body:
+  - type: input
+    id: service
+    attributes:
+      label: Service
+      placeholder: "e.g. Vercel, api.mapbox.com, npm:@sentry/browser"
+    validations:
+      required: true
+  - type: dropdown
+    id: country
+    attributes:
+      label: Country
+      options: [IR, CN, RU, other]
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: What should the status be?
+      options: [blocked, sanctioned, unavailable, degraded, ok, unknown]
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Public source
+      description: A link marz can cite (official availability page, terms of service, OONI measurement, dated test from inside the country). Verdicts without a source stay "unknown".
+    validations:
+      required: true
