@@ -19,6 +19,8 @@ var l=localStorage.getItem('marz-lang')||'fa';if(l==='fa'){document.documentElem
 <link rel="preload" href="fonts/rubik-mono-one-400.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="identity.css"><style>/*mrz-theme-badge*/[data-theme-toggle]{position:relative}
 html[data-theme-mode=system] [data-theme-toggle]::after{content:"A";position:absolute;inset-inline-end:-3px;bottom:-3px;min-width:13px;height:13px;padding:0 2px;box-sizing:border-box;border-radius:7px;font:700 8px/13px system-ui,sans-serif;letter-spacing:0;text-align:center;background:#14181f;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.55);pointer-events:none}
 html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{background:#f3f4f6;color:#14181f;box-shadow:0 0 0 1px rgba(0,0,0,.5)}</style>
+<link rel="stylesheet" href="mx.css">
+<style id="mx-tokens">:root{--mx-acc:var(--amber);--mx-acc-t:#7a5c00;--mx-on-acc:#111;--mx-fg:var(--ink);--mx-mut:var(--muted);--mx-card:var(--panel);--mx-line:var(--line)}html[data-theme=dark]{--mx-acc-t:var(--amber)}@media (prefers-color-scheme:dark){html:not([data-theme]){--mx-acc-t:var(--amber)}}.mx-sec>h2{font-family:'Rubik Mono One',system-ui,sans-serif;font-weight:400;font-size:clamp(20px,2.6vw,30px);letter-spacing:.02em}</style>
 </head>
 <body>
 <a class="skip" href="#demo" data-i18n="skip">Skip to the demo</a>
@@ -61,6 +63,9 @@ html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{backgro
   </div>
 </section>
 
+
+<!-- mx: one-sentence "what is it" -->
+<section class="mx mx-sec mx-one" aria-label="What it is"><span class="mx-kick"><span lang="en">In one sentence</span><span lang="fa">در یک جمله</span></span><p lang="en">marz is <mark>a border check for your code</mark>: it reads your project and lists every service (maps, sign-in, payments, AI APIs) that is blocked or sanctioned in Iran, China or Russia, with a source and an alternative for each.</p><p lang="fa" dir="rtl">مرز <mark>یک ایست بازرسی مرزی برای کد شماست</mark>: پروژه را می‌خواند و هر سرویسی (نقشه، ورود، پرداخت، APIهای هوش مصنوعی) را که در ایران، چین یا روسیه مسدود یا تحریم است، همراه منبع و یک جایگزین فهرست می‌کند.</p></section>
 <section class="demo" id="demo">
   <div class="section-head">
     <h2 data-i18n="demo.title">Scan right here</h2>
@@ -91,7 +96,7 @@ html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{backgro
 
 <section class="how" id="how">
   <div class="section-head"><h2 data-i18n="how.title">Four commands</h2></div>
-  <div class="cards">
+  <div class="mx-steps cards">
     <article class="card">
       <h3><code>marz</code></h3>
       <p data-i18n="how.scan">Scans code and 12 manifest formats: npm, pip, Poetry, Go, Flutter, Gradle, Maven, CocoaPods, Composer, Bundler, Dockerfiles and compose files. Output as text, JSON, Markdown or SARIF, with <code>--fail-on</code> for CI.</p>
@@ -168,6 +173,12 @@ Self-hosted 7 font file(s) (213 KB)</code></pre>
   </div>
   <p class="fine limits" data-i18n="cmp.limits">Honest limits: marz knows 30-odd services, not everything. Censorship changes, so unknown means "probe it". It is not legal advice about sanctions.</p>
 </section>
+
+<!-- mx: latest release (real tag; refreshed from the GitHub API when online) -->
+<section class="mx mx-sec" id="release" aria-labelledby="mx-rel-h"><span class="mx-kick"><span class="mx-live" aria-hidden="true"></span><span lang="en">Latest release</span><span lang="fa">آخرین نسخه</span></span><h2 id="mx-rel-h"><span lang="en">Ready to install</span><span lang="fa">آمادهٔ نصب</span></h2><div class="mx-rel" data-repo="marz" data-mx><div class="mx-ver" data-mx-ver>v0.1.0</div><div class="mx-meta"><span lang="en">Published <b data-mx-date data-iso="2026-10-16T18:22:00Z" lang="en">2026-10-16</b>. Includes single binaries, marz.wasm and SHA256SUMS.</span><span lang="fa">منتشرشده در <b data-mx-date data-iso="2026-10-16T18:22:00Z" lang="fa">2026-10-16</b>. شامل فایل اجرایی تکی، marz.wasm و SHA256SUMS.</span></div><div class="mx-btns"><a class="mx-btn p" data-mx-link href="https://github.com/mrzroot/marz/releases/tag/v0.1.0"><span lang="en">Release notes</span><span lang="fa">یادداشت انتشار</span></a><a class="mx-btn" href="https://github.com/mrzroot/marz/blob/main/CHANGELOG.md"><span lang="en">Changelog</span><span lang="fa">تغییرات</span></a><a class="mx-btn" href="https://github.com/mrzroot/marz/releases"><span lang="en">All releases</span><span lang="fa">همهٔ نسخه‌ها</span></a></div></div></section>
+
+<!-- mx: FAQ (answers from the README) -->
+<section class="mx mx-sec" id="faq" aria-labelledby="mx-faq-h"><span class="mx-kick">FAQ</span><h2 id="mx-faq-h"><span lang="en">Questions people ask</span><span lang="fa">پرسش‌های پرتکرار</span></h2><div class="mx-faq" data-mx><details><summary><span lang="en">Does marz send my code anywhere?</span><span lang="fa">مرز کد مرا جایی می‌فرستد؟</span></summary><div class="mx-ans"><span lang="en">No. The scan runs offline with a built-in knowledge base. The demo on this page is marz compiled to WebAssembly, running inside your browser.</span><span lang="fa">نه. اسکن آفلاین و با پایگاه دانش داخلی خودش انجام می‌شود. دموی همین صفحه هم خود مرز است که به WebAssembly ترجمه شده و داخل مرورگر شما اجرا می‌شود.</span></div></details><details><summary><span lang="en">Does a clean scan mean my app works in Iran?</span><span lang="fa">اسکن تمیز یعنی برنامه‌ام در ایران کار می‌کند؟</span></summary><div class="mx-ans"><span lang="en">It means nothing marz knows about will break. marz only knows the services in its knowledge base; test anything else with <code>marz probe</code> from inside the country.</span><span lang="fa">یعنی هیچ‌کدام از چیزهایی که مرز می‌شناسد خراب نمی‌شود. مرز فقط سرویس‌های پایگاه دانشش را می‌شناسد؛ بقیه را با <code>marz probe</code> از داخل کشور امتحان کنید.</span></div></details><details><summary><span lang="en">Why run probe from inside the country?</span><span lang="fa">چرا probe را باید از داخل کشور اجرا کرد؟</span></summary><div class="mx-ans"><span lang="en"><code>probe</code> describes the network it runs on. From outside it says nothing about inside, and it warns you about that, and about fake-IP DNS from local VPN apps.</span><span lang="fa"><code>probe</code> شبکه‌ای را توصیف می‌کند که رویش اجرا می‌شود. از بیرون چیزی دربارهٔ داخل نمی‌گوید و همین را هشدار می‌دهد؛ دربارهٔ DNS جعلی برنامه‌های VPN هم هشدار می‌دهد.</span></div></details><details><summary><span lang="en">Can I use it in CI?</span><span lang="fa">در CI هم می‌شود استفاده کرد؟</span></summary><div class="mx-ans"><span lang="en">Yes. <code>--fail-on high</code> fails the build, and marz writes text, JSON, Markdown and SARIF. There is a GitHub Action too.</span><span lang="fa">بله. <code>--fail-on high</code> بیلد را متوقف می‌کند و مرز خروجی متن، JSON، مارک‌داون و SARIF می‌دهد. یک GitHub Action هم دارد.</span></div></details><details><summary><span lang="en">Is this legal advice?</span><span lang="fa">این مشاورهٔ حقوقی است؟</span></summary><div class="mx-ans"><span lang="en">No. Each finding cites a public source, but marz is not legal advice about sanctions compliance.</span><span lang="fa">نه. هر یافته یک منبع عمومی دارد، اما مرز مشاورهٔ حقوقی دربارهٔ رعایت تحریم‌ها نیست.</span></div></details></div></section>
 </main>
 
 <footer class="foot">
@@ -207,5 +218,6 @@ window.addEventListener('pageshow',function(e){if(e.persisted)apply(get(),false)
 if(window.MutationObserver)new MutationObserver(sync).observe(d,{attributes:true,attributeFilter:['data-lang','lang']});
 /* normalise whatever the boot script set */apply(get(),false)})();</script>
 <script>/* keyboard access for horizontally scrollable code blocks */(function(){function f(){document.querySelectorAll('pre,.code,[id^=c-],#cmd,#c1,#t1').forEach(function(e){if(e.scrollWidth>e.clientWidth+1&&!e.hasAttribute('tabindex'))e.setAttribute('tabindex','0')})}addEventListener('load',f);addEventListener('resize',f);setTimeout(f,1500)})()</script>
+<script src="mx.js" defer></script>
 </body>
 </html>
