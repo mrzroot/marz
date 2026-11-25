@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr" data-theme="dark">
+<html data-portfolio-design="marz" lang="en" dir="ltr" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="color-scheme" content="light dark">
@@ -16,11 +16,12 @@
 (function(){var m0='system';try{m0=localStorage.getItem('mrz-theme')||'system'}catch(e){}if(m0!=='light'&&m0!=='dark')m0='system';var t=m0==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):m0;document.documentElement.dataset.theme=t;document.documentElement.setAttribute('data-theme-mode',m0);document.documentElement.style.colorScheme=t;
 var l=localStorage.getItem('marz-lang')||'fa';if(l==='fa'){document.documentElement.lang='fa';document.documentElement.dir='rtl';}})();
 </script>
-<link rel="preload" href="fonts/rubik-mono-one-400.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="identity.css"><style>/*mrz-theme-badge*/[data-theme-toggle]{position:relative}
+<link rel="stylesheet" href="identity.css"><style>/*mrz-theme-badge*/[data-theme-toggle]{position:relative}
 html[data-theme-mode=system] [data-theme-toggle]::after{content:"A";position:absolute;inset-inline-end:-3px;bottom:-3px;min-width:13px;height:13px;padding:0 2px;box-sizing:border-box;border-radius:7px;font:700 8px/13px system-ui,sans-serif;letter-spacing:0;text-align:center;background:#14181f;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.55);pointer-events:none}
 html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{background:#f3f4f6;color:#14181f;box-shadow:0 0 0 1px rgba(0,0,0,.5)}</style>
 <link rel="stylesheet" href="mx.css">
 <style id="mx-tokens">:root{--mx-acc:var(--amber);--mx-acc-t:#7a5c00;--mx-on-acc:#111;--mx-fg:var(--ink);--mx-mut:var(--muted);--mx-card:var(--panel);--mx-line:var(--line)}html[data-theme=dark]{--mx-acc-t:var(--amber)}@media (prefers-color-scheme:dark){html:not([data-theme]){--mx-acc-t:var(--amber)}}.mx-sec>h2{font-family:'Rubik Mono One',system-ui,sans-serif;font-weight:400;font-size:clamp(20px,2.6vw,30px);letter-spacing:.02em}</style>
+<link rel="stylesheet" href="portfolio-reframe.css">
 </head>
 <body>
 <a class="skip" href="#demo" data-i18n="skip">Skip to the demo</a>
@@ -40,6 +41,20 @@ html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{backgro
 </header>
 
 <main>
+
+<!-- Portfolio design: localized overview; original project sections remain below. -->
+<aside class="rr-signal">
+  <div class="rr-annotation"><p class="rr-product"><bdi>marz</bdi><span><span class="rr-en" lang="en">Regional compatibility</span><span class="rr-fa" lang="fa">سازگاری منطقه‌ای</span></span></p>
+    <p class="rr-promise"><span class="rr-en" lang="en">Find fragile dependencies before users do</span><span class="rr-fa" lang="fa">وابستگی‌های شکننده را پیش از کاربران پیدا کنید</span></p>
+    <a class="rr-start" href="#demo"><span class="rr-en" lang="en">Open the compatibility scanner</span><span class="rr-fa" lang="fa">باز کردن اسکنر سازگاری</span> <span aria-hidden="true">↓</span></a>
+  </div>
+  <div class="rr-visual" aria-hidden="true">
+    <svg viewBox="0 0 360 100" width="360" height="100" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M68 20h222v60H68zM68 40h222M68 60h222M110 20v60m44-60v60m44-60v60m44-60v60" opacity=".42"/><path d="m70 65 36-21 47 8 42-15 44 18 48-27" stroke-dasharray="5 4"/><circle cx="106" cy="44" r="8" fill="currentColor"/><circle cx="195" cy="37" r="8" fill="currentColor"/><circle cx="240" cy="55" r="8" fill="currentColor"/><path d="M273 12v19m-9-9h18"/>
+    </svg>
+    <div class="rr-steps"><span><span class="rr-en" lang="en">Inventory</span><span class="rr-fa" lang="fa">شناسایی</span></span><span><span class="rr-en" lang="en">Evidence</span><span class="rr-fa" lang="fa">شواهد</span></span><span><span class="rr-en" lang="en">Review</span><span class="rr-fa" lang="fa">بازبینی</span></span></div>
+  </div>
+</aside>
 <section class="hero">
   <div class="hero-copy">
     <p class="kicker" data-i18n="hero.kicker">Open-source CLI · GitHub Action · runs in your browser</p>
@@ -221,3 +236,4 @@ if(window.MutationObserver)new MutationObserver(sync).observe(d,{attributes:true
 <script src="mx.js" defer></script>
 </body>
 </html>
+
