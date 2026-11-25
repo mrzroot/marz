@@ -15,6 +15,10 @@ marz scans a code base for services that are **blocked**, **sanctioned** or **un
 
 [Website and live demo](https://mrzroot.github.io/marz/) · [فارسی](README.fa.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
+
+
+[Project walkthrough · راهنمای عملی پروژه](docs/project-guide.html)
+
 </div>
 
 *Marz* (مرز) is Persian for "border".
