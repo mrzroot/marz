@@ -22,7 +22,7 @@ html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{backgro
 <link rel="stylesheet" href="mx.css">
 <style id="mx-tokens">:root{--mx-acc:var(--amber);--mx-acc-t:#7a5c00;--mx-on-acc:#111;--mx-fg:var(--ink);--mx-mut:var(--muted);--mx-card:var(--panel);--mx-line:var(--line)}html[data-theme=dark]{--mx-acc-t:var(--amber)}@media (prefers-color-scheme:dark){html:not([data-theme]){--mx-acc-t:var(--amber)}}.mx-sec>h2{font-family:'Rubik Mono One',system-ui,sans-serif;font-weight:400;font-size:clamp(20px,2.6vw,30px);letter-spacing:.02em}</style>
 <link rel="stylesheet" href="portfolio-reframe.css">
-<link rel="stylesheet" href="/assets/studio-mark.css"></head>
+<link rel="stylesheet" href="/assets/studio-mark.css"><link rel="stylesheet" href="/assets/portfolio/embed.css"><script defer src="/assets/portfolio/exhibit.js"></script></head>
 <body>
 <a class="skip" href="#demo" data-i18n="skip">Skip to the demo</a>
 <header class="top">
@@ -77,11 +77,32 @@ html[data-theme=dark][data-theme-mode=system] [data-theme-toggle]::after{backgro
     <p class="board-foot" data-i18n="board.foot">Statuses from marz's knowledge base, updated 2026-10-16</p>
   </div>
 </section>
-<aside class="studio-project-entry" style="--entry-color:#edb3ac">
-  <img src="/assets/thumbs/marz.webp" alt="" width="160" height="100" loading="lazy" decoding="async">
-  <div><strong>Map the unavailable dependency</strong><small>Check the dependency and fallback</small></div>
-  <a href="/playground/?project=marz&amp;lang=en">Try the case ↗</a>
-</aside>
+<div class="atlas-embedded" data-motif="route" style="--exhibit-hue:17"><section class="exhibit-studio" id="portfolio-example" data-project="marz" data-motif="route" data-state="0" aria-labelledby="portfolio-example-title">
+    <div class="exhibit-studio-head"><div><p class="exhibit-kicker"><span class="pf-en" lang="en">Illustrative sample</span><span class="pf-fa" lang="fa">دادهٔ نمونه</span></p><h2 id="portfolio-example-title"><span class="pf-en" lang="en">Send the sample through a route</span><span class="pf-fa" lang="fa">نمونه را از یک مسیر عبور بده</span></h2></div>
+       <a href="/projects/guide/marz/"><span class="pf-en" lang="en">Interactive introduction</span><span class="pf-fa" lang="fa">معرفی تعاملی</span> <i class="exhibit-arrow" aria-hidden="true"></i></a></div>
+    <div class="exhibit-lab">
+      <div class="stage-picture" aria-hidden="true">
+        <div class="stage-sign"><i></i><i></i><i></i><strong dir="ltr">marz</strong></div>
+
+        <div class="stage-track" dir="ltr"></div>
+        <div class="stage-evidence" dir="ltr"><span dir="auto">Browser</span><span dir="auto">App 200</span><span dir="auto">Font unavailable</span></div>
+      </div>
+      <div class="stage-work">
+        <p><span class="pf-en" lang="en">A web page loads but a required remote font service is unavailable in the sample region.</span><span class="pf-fa" lang="fa">صفحهٔ وب باز می‌شود ولی سرویس فونت راه‌دور در منطقهٔ نمونه دردسترس نیست.</span></p>
+        <div class="stage-actions" role="group" aria-label="Example controls / کنترل‌های نمونه">
+          <button type="button" data-stage="1" aria-pressed="false"><span class="pf-en" lang="en">Check the dependency and fallback</span><span class="pf-fa" lang="fa">وابستگی و مسیر جایگزین را بررسی کن</span><i class="exhibit-arrow" aria-hidden="true"></i></button><button type="button" data-stage="2" aria-pressed="false"><span class="pf-en" lang="en">Count a successful page response only</span><span class="pf-fa" lang="fa">فقط پاسخ موفق صفحه را حساب کن</span><i class="exhibit-arrow" aria-hidden="true"></i></button>
+        </div>
+        <output class="stage-result" aria-live="polite"><span class="pf-en" lang="en">Try a response to see its effect.</span><span class="pf-fa" lang="fa">یک کار را انتخاب کن و اثرش را ببین.</span></output>
+        <div class="stage-foot">
+          <button type="button" data-stage="0" aria-pressed="true"><span class="pf-en" lang="en">Reset example</span><span class="pf-fa" lang="fa">بازنشانی نمونه</span></button>
+
+        </div>
+      </div>
+    </div>
+   </section>
+    <p class="exhibit-takeaway"><span class="pf-en" lang="en">Record which essential dependencies fail after the HTML loads. Compare that list between regions before planning fallbacks.</span><span class="pf-fa" lang="fa">وابستگی‌های ضروری را که بعد از بارگیری HTML خطا می‌خورند ثبت کن و پیش از انتخاب مسیر پشتیبان، فهرست مناطق را مقایسه کن.</span></p>
+    <script type="application/json" data-embed-project>{"entries":[{"id":"marz","group":"systems","motif":"route","color":"#edb3ac","title":["Map the unavailable dependency","وابستگیِ در دسترس‌نبودنی را پیدا کن"],"brief":["A web page loads but a required remote font service is unavailable in the sample region.","صفحهٔ وب باز می‌شود ولی سرویس فونت راه‌دور در منطقهٔ نمونه دردسترس نیست."],"actions":[["Check the dependency and fallback","وابستگی و مسیر جایگزین را بررسی کن"],["Count a successful page response only","فقط پاسخ موفق صفحه را حساب کن"]],"outcomes":[["The audit finds the missing asset and identifies where a self-hosted fallback could help.","ممیزی دارایی غایب و محل مناسب برای جایگزین خودمیزبان را پیدا می‌کند."],["A successful HTML response hides partially broken rendering.","پاسخ موفق HTML خرابی بخشی از رندر را پنهان می‌کند."]],"evidence":[["Browser","App 200","Font unavailable"],["Browser","App 200","Local fallback"],["Browser","App 200","Font untested"]],"name":"marz","kicker":["Geo-block & sanctions check","بررسی تحریم و فیلترینگ"],"intro":["Review which third-party services your project relies on and where those dependencies may be unavailable.","ببینید پروژه به چه سرویس‌های بیرونی متکی است و کدام وابستگی‌ها ممکن است در بازارهای هدف در دسترس نباشند."],"hint":["Start with your own small project and review the evidence beside one reported external dependency before changing your architecture.","با پروژهٔ کوچک خودتان شروع کنید. قبل از تغییر معماری، شواهد مربوط به یکی از وابستگی‌های گزارش‌شده را بخوانید."],"site":"/marz/","source":"https://github.com/mrzroot/marz","layout":"switchboard","hue":17,"image":"/assets/thumbs/marz.webp"}],"labels":{"map":["Project Atlas","اطلس پروژه‌ها"],"mapIntro":["Four ways to explore the projects. Choose a project to see what it does and open its interactive introduction.","چهار مسیر برای گشتن میان پروژه‌ها. یکی را انتخاب کن تا ببینی چه کار می‌کند و معرفی تعاملی‌اش را باز کنی."],"agents":["AI tooling","ابزارهای هوش مصنوعی"],"language":["Language and data","زبان و داده"],"systems":["Systems","سامانه‌ها"],"showcase":["Design and demos","طراحی و دمو"],"projects":["All projects","همهٔ پروژه‌ها"],"open":["Interactive introduction","معرفی تعاملی"],"test":["Try the example","نمونه را امتحان کن"],"story":["The situation","مسئله"],"reference":["Inspect the project","بررسی پروژه"],"source":["View source on GitHub","کد منبع در گیت‌هاب"],"demo":["Open project website","باز کردن سایت پروژه"],"guide":["Suggested first step","قدم اول پیشنهادی"],"sample":["Illustrative sample","دادهٔ نمونه"],"result":["What happens","نتیجه"],"choose":["Try a response to see its effect.","یک کار را انتخاب کن و اثرش را ببین."],"still":["Initial state","حالت اولیه"],"reset":["Reset example","بازنشانی نمونه"],"more":["Explore another project","یک پروژهٔ دیگر ببین"]}}</script>
+  </div>
 
 
 <!-- mx: one-sentence "what is it" -->
